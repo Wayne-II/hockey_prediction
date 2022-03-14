@@ -1,37 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useState } from 'react';
-class SkatersPicks extends React.Component {
-  render(){
-    let choices = this.props.skaters
-      .filter( skater =>  this.props.selectedSkaters.find( skaterName => skaterName === skater.name ) )
-      .sort( ( a, b ) => b.goals - a.goals );
-    return <div>
-        <h3>{ this.props.header }</h3>
-        <ul style={ { listStyleType:'none', padding:0, margin:0 } }>
-          {
-            choices.map( skater => <li>{ skater.name }: { skater.goals }</li>)
-          }
-        </ul>
-      </div>
-  }
-}
-class SelectedSkaters extends React.Component {
-  render(){
-    if( this.props.isLoading ){
-      return "";
-    }
+import React from 'react';
+import SelectedSkaters from './SelectedSkaters.js';
 
-    return <div style={ { 
-      display: 'flex',
-      flexDirection: 'row'
-     } }>
-      <SkatersPicks header="1st picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 1 ] } />
-      <SkatersPicks header="2nd picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 2 ] } />
-      <SkatersPicks header="3rd picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 3 ] } />
-    </div>;
-  }
-}
+//TODO: replace input buttons with labeled buttons ( 0, 1, 2, 3 being the labels )
+//TODO: extraction of function(s) to component(s)
+//TODO: extractoin of component(s) to separate files
 
 class Hockey extends React.Component {
   getTeamSkaters( team ){
@@ -47,6 +21,7 @@ class Hockey extends React.Component {
     return scheduled_teams;
   }
 
+  
   getSkaterListItems( team_skaters ){
     return team_skaters.map( skater => {
       return <li style={{ listStyleType:'none', display:'flex', alignItems:'flex-start', textAlign:'start'}}>
@@ -60,9 +35,6 @@ class Hockey extends React.Component {
   }
 
   getSkatersList(){
-    //return skaters in descending order based on goals
-    //return this.props.skaters[0].goals ;
-
     let scheduled_teams = this.getScheduledTeams();
     let skaters_by_team = {};
 
@@ -73,7 +45,6 @@ class Hockey extends React.Component {
     for( let team_idx = 0; team_idx < scheduled_teams.length; team_idx += 2 ){
       let first_wins = this.props.standings[ scheduled_teams[ team_idx ] + '-' + scheduled_teams[ team_idx ] ] > 0;
       let match_tie = this.props.standings[ scheduled_teams[ team_idx ] + '-' + scheduled_teams[ team_idx ] ] == 0;
-      console.log( this.props.standings[ scheduled_teams[ team_idx ] + '-' + scheduled_teams[ team_idx ] ] );
       let win_colour = match_tie ? "yellow" : "green";
       let lose_colour = match_tie ? "yellow" : "red";
       skaters_lists.push(
@@ -135,18 +106,15 @@ class App extends React.Component{
   }
 
   componentDidMount(){
+    //fetch app data from API
     fetch( 'https://hockey/tims/',{mode:'cors'} )
     .then( response => response.json() )
     .then( data => {
-      console.log( 'data', data );
       this.setState( { ...data, isLoading: false } );
     } );
   }
 
   changeSelectedSkater( event ){
-
-    console.log( 'App', event, this, event.target.value );
-    
     let selection = parseInt( event.target.value );
     let selection_filter = skater_name => event.target.name !== skater_name;
     let selected_skaters = {
@@ -159,7 +127,6 @@ class App extends React.Component{
       selected_skaters[ selection ].push( event.target.name );
     }
 
-    console.log( this.state, selected_skaters );
     this.setState( { selected_skaters } );
   }
 
@@ -176,8 +143,5 @@ class App extends React.Component{
     );
   }
 }
-// function App() {
-  
-// }
 
 export default App;
