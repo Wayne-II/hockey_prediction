@@ -1,52 +1,34 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useState } from 'react';
-
+class SkatersPicks extends React.Component {
+  render(){
+    let choices = this.props.skaters
+      .filter( skater =>  this.props.selectedSkaters.find( skaterName => skaterName === skater.name ) )
+      .sort( ( a, b ) => b.goals - a.goals );
+    return <div>
+        <h3>{ this.props.header }</h3>
+        <ul style={ { listStyleType:'none', padding:0, margin:0 } }>
+          {
+            choices.map( skater => <li>{ skater.name }: { skater.goals }</li>)
+          }
+        </ul>
+      </div>
+  }
+}
 class SelectedSkaters extends React.Component {
   render(){
     if( this.props.isLoading ){
       return "";
     }
-    console.log( 'selected skaters props', this.props );
-    //let firstChoice = [];
-    let firstChoice = this.props.skaters
-      .filter( skater =>  this.props.selectedSkaters[ 1 ].find( skaterName => skaterName === skater.name ) )
-      .sort( ( a, b ) => b.goals - a.goals );//descending order
-    let secondChoice = this.props.skaters
-      .filter( skater =>  this.props.selectedSkaters[ 2 ].find( skaterName => skaterName === skater.name ) )
-      .sort( ( a, b ) => b.goals - a.goals );//descending order
-    let thirdChoice = this.props.skaters
-      .filter( skater =>  this.props.selectedSkaters[ 3 ].find( skaterName => skaterName === skater.name ) )
-      .sort( ( a, b ) => b.goals - a.goals );//descending order
 
     return <div style={ { 
       display: 'flex',
       flexDirection: 'row'
      } }>
-      <div>
-        <h3>1st choice</h3>
-        <ul style={ { listStyleType:'none', padding:0, margin:0 } }>
-          {
-            firstChoice.map( skater => <li>{ skater.name }: { skater.goals }</li>)
-          }
-        </ul>
-      </div>
-      <div>
-        <h3>2nd choice</h3>
-        <ul style={ { listStyleType:'none', padding:0, margin:0 } }>
-          {
-            secondChoice.map( skater => <li>{ skater.name }: { skater.goals }</li>)
-          }
-        </ul>
-      </div>
-      <div>
-        <h3>3rd choice</h3>
-        <ul style={ { listStyleType:'none', padding:0, margin:0 } }>
-          {
-            thirdChoice.map( skater => <li>{ skater.name }: { skater.goals }</li>)
-          }
-        </ul>
-      </div>
+      <SkatersPicks header="1st picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 1 ] } />
+      <SkatersPicks header="2nd picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 2 ] } />
+      <SkatersPicks header="3rd picks" skaters={ this.props.skaters } selectedSkaters={ this.props.selectedSkaters[ 3 ] } />
     </div>;
   }
 }
