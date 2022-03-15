@@ -1,40 +1,41 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
+
 import SelectedSkaters from './SelectedSkaters.js';
+import PlayerSelector from './PlayerSelector.js';
+import QuickAddSearch from './QuickAddSearch.js';
 
 //TODO: replace input buttons with labeled buttons ( 0, 1, 2, 3 being the labels )
-//TODO: extraction of function(s) to component(s)
+//TODO: extraction of <Hockey /> function(s) to component(s)
 //TODO: extractoin of component(s) to separate files
+//TODO: --extract delete style
 
-class Hockey extends React.Component {
-  getTeamSkaters( team ){
+class SelectionOptions extends React.Component {
+  getTeamSkaters( team ){//utility function
     var ret = this.props.skaters.filter( skater => {
       return skater.team === team;
     } );
     return ret;
   }
 
-  getScheduledTeams(){
+  getScheduledTeams(){//utility function
     let scheduled_teams = [];
     scheduled_teams = scheduled_teams.concat( ...this.props.schedule.map( scheduled_match => scheduled_match.split( '-' ) ) );
     return scheduled_teams;
   }
 
   
-  getSkaterListItems( team_skaters ){
+  getSkaterListItems( team_skaters ){//component(s) generating function
     return team_skaters.map( skater => {
       return <li style={{ listStyleType:'none', display:'flex', alignItems:'flex-start', textAlign:'start'}}>
-        <input type="radio" name={skater.name} value="0" onChange={this.props.changeSelectedSkater} />
-        <input type="radio" name={skater.name} value="1" onChange={this.props.changeSelectedSkater} />
-        <input type="radio" name={skater.name} value="2" onChange={this.props.changeSelectedSkater} />
-        <input type="radio" name={skater.name} value="3" onChange={this.props.changeSelectedSkater} />
+        <PlayerSelector skater={ skater } selectedSkaters={ this.props.selectedSkaters } click={ this.props.changeSelectedSkater } />
         {skater.goals} - {skater.name}
       </li>;
     } );
   }
 
-  getSkatersList(){
+  getSkatersList(){//component(s) generating function
     let scheduled_teams = this.getScheduledTeams();
     let skaters_by_team = {};
 
@@ -47,28 +48,17 @@ class Hockey extends React.Component {
       let match_tie = this.props.standings[ scheduled_teams[ team_idx ] + '-' + scheduled_teams[ team_idx ] ] == 0;
       let win_colour = match_tie ? "yellow" : "green";
       let lose_colour = match_tie ? "yellow" : "red";
+      let backgroundColor = team_idx % 4 === 0 ? '#282c34' : '#232a36';
       skaters_lists.push(
-        <div style={{width:"33%",display:'flex', flexDirection:'column' } }>
+        <div style={{width:"33%",display:'flex', flexDirection:'column', backgroundColor } }>
           <span>{scheduled_teams[ team_idx ] } @ {scheduled_teams[ team_idx + 1 ] }</span>
           
           <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
             <span style={ first_wins ? {color:win_colour, width:'50%'} : {color:lose_colour, width:'50%'}}>{scheduled_teams[ team_idx ] }</span>
             <span style={ first_wins ? {color:lose_colour, width:'50%'} : {color:win_colour, width:'50%'}}>{scheduled_teams[ team_idx + 1 ] }</span>
-            <span style={ { width:'100%', display:'flex', flexWrap: 'no-wrap' } }>
-              <span style={ { width:'50%', display:'flex', alignItems:'flex-start' } }>
-                <span style={ { width: '1.4em' } }>0</span>
-                <span style={ { width: '1.4em' } }>1</span>
-                <span style={ { width: '1.4em' } }>2</span>
-                <span style={ { width: '1.4em' } }>3</span>
-              </span>
-              <span style={ { width:'50%', display:'flex', alignItems:'flex-start' } }>
-                <span style={ { width: '1.4em' } }>0</span>
-                <span style={ { width: '1.4em' } }>1</span>
-                <span style={ { width: '1.4em' } }>2</span>
-                <span style={ { width: '1.4em' } }>3</span>
-              </span>
-            </span>
-            <ul style={{display:"flex", flexDirection:"column",width:'50%', padding:0, margin:0, alignItems:"flex-start", justifyContent:"flex-start"}}>
+            <ul onClick={ event => {
+
+            } } style={{display:"flex", flexDirection:"column",width:'50%', padding:0, margin:0, alignItems:"flex-start", justifyContent:"flex-start", flexWrap:'nowrap'}}>
               { 
                 this.getSkaterListItems( skaters_by_team[ scheduled_teams[ team_idx ] ] )
               }
@@ -106,7 +96,7 @@ class App extends React.Component{
   }
 
   componentDidMount(){
-    //fetch app data from API
+    //fetch app data from API( table scraper )
     fetch( 'https://hockey/tims/',{mode:'cors'} )
     .then( response => response.json() )
     .then( data => {
@@ -114,17 +104,31 @@ class App extends React.Component{
     } );
   }
 
-  changeSelectedSkater( event ){
-    let selection = parseInt( event.target.value );
-    let selection_filter = skater_name => event.target.name !== skater_name;
+  changeSelectedSkater( event ){  
+    /**TODO: For some reason, when using FontAwesomeIcon component,
+     * the target for the onclick could be either an svg or a
+     * path.  The problem is that the data- attributes are within
+     * the dataset of the svg element and not the path.  Figure out
+     * how to better handle this.
+     */
+    let dataset = {};
+    if( event.target.tagName === 'svg' ){
+      dataset = event.target.dataset
+    }
+    if( event.target.tagName === 'path' ){
+      dataset = event.target.parentElement.dataset;
+    }
+
+    let selection = parseInt( dataset.choice );
+    let selection_filter = skater_name => dataset.name !== skater_name;
     let selected_skaters = {
       1: [ ...this.state.selected_skaters[ 1 ] ].filter( selection_filter ),
       2: [ ...this.state.selected_skaters[ 2 ] ].filter( selection_filter ),
       3: [ ...this.state.selected_skaters[ 3 ] ].filter( selection_filter )
     };
 
-    if( selection !== 0 ){
-      selected_skaters[ selection ].push( event.target.name );
+    if( selection !== 0 ){//todo: assumes valid number and is within range
+      selected_skaters[ selection ].push( dataset.name );
     }
 
     this.setState( { selected_skaters } );
@@ -135,8 +139,9 @@ class App extends React.Component{
       <div className="App">
         <header className="App-header">
           <h1>Coffee-o-Matic</h1>
+          <QuickAddSearch isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } />
-          <Hockey isLoading={ this.state.isLoading } schedule={ this.state.schedule } skaters={ this.state.skaters } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
+          <SelectionOptions isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
         </header>
         
       </div>
