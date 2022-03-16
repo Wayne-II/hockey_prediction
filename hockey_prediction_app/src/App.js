@@ -111,6 +111,7 @@ class App extends React.Component{
      * the dataset of the svg element and not the path.  Figure out
      * how to better handle this.
      */
+    console.log( 'change selected', event )
     let dataset = {};
     if( event.target.tagName === 'svg' ){
       dataset = event.target.dataset
@@ -140,7 +141,7 @@ class App extends React.Component{
         <header className="App-header">
           <h1>Coffee-o-Matic</h1>
           <QuickAddSearch isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
-          <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } />
+          <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <SelectionOptions isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
         </header>
         
