@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectedSkater from './SelectedSkater.js';
+import SkaterSelector from './SkaterSelector.js';
 
 class SkatersPicks extends React.Component {
     render() {
@@ -29,7 +29,12 @@ class SkatersPicks extends React.Component {
                 margin: '1.5em 0 0 0'
             }}>
                 {
-                    choices.map(skater => <SelectedSkater skater={skater} click={this.props.click} />)
+                    choices.map(skater => <SkaterSelector 
+                        removeOnly="true" 
+                        skater={skater} 
+                        selectedSkater={this.props.selectedSkaters}
+                        click={this.props.click} 
+                        />)
                 }
             </ul>
         </div>
