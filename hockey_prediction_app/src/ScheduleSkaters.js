@@ -47,7 +47,12 @@ class ScheduleSkaters extends React.Component {
             return 'loading';
         }
         let scheduleSkaters = this.getScheduleSkaters();
-        return <div style={{  }}>
+        return <div style={{
+            display: 'flex',
+            border: 'thin solid red',
+            flex: '1 0 100%',
+            flexWrap:'wrap',
+        }}>
             {scheduleSkaters}
         </div>;
     }

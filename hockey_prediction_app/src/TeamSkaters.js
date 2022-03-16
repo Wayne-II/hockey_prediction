@@ -7,17 +7,27 @@ class TeamSkaters extends React.Component {
     }
 
     render() {
-        return this.props.skaters.map(skater => {
-            return <ul style={{  }}>
-                <li style={{  }}>
-                    <SkaterSelector
-                        skater={skater}
-                        selectedSkaters={this.props.selectedSkaters}
-                        click={this.props.click}
-                    />
-                </li>
-            </ul>;
+        const teamSkaters = this.props.skaters.map(skater => {
+            return <li>
+                <SkaterSelector
+                    skater={skater}
+                    selectedSkaters={this.props.selectedSkaters}
+                    click={this.props.click}
+                />
+            </li>
         });
+        return <ul style={{
+            listStyleType: 'none',
+            padding: 0,
+            margin: 0,
+            flex: '1 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+
+        }}>
+            {teamSkaters}
+        </ul>;
     }
 }
 
