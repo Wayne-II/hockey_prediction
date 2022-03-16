@@ -1,6 +1,7 @@
 .SkaterSelectorButton_default {
     width:1em;
     height:1em;
+    border-radius: 20%;
     color: #61dafb;
 }
 .SkaterSelectorButton_default:hover{

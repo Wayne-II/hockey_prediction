@@ -7,7 +7,7 @@ class GameSkaters extends React.Component {
 
         const teams = this.props.teams.split('-');
 
-        return <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+        return <div style={{  }}>
             <GameHeader teams={this.props.teams} />
             <TeamSkaters
                 skaters={this.props.skaters[teams[0]]}

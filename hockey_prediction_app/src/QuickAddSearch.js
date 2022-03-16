@@ -6,31 +6,31 @@ import SkaterSelector from './SkaterSelector';
  * focus back on input once button pushed with contents removed
  */
 
-class QuickAddSearch extends React.Component{
-    constructor( props ){
-        super( props );
-        this.inputChangeHandler = this.inputChangeHandler.bind( this );
+class QuickAddSearch extends React.Component {
+    constructor(props) {
+        super(props);
+        this.inputChangeHandler = this.inputChangeHandler.bind(this);
         this.state = {
             matched_skaters: []
         };
     }
-    inputChangeHandler( event ){
-        if( !this.props.isLoading && event.target.value.length > 0 ){
-            let re = new RegExp( event.target.value, 'i' );
-            this.setState( { 
-                matched_skaters: this.props.skaters.filter( skater => {
+    inputChangeHandler(event) {
+        if (!this.props.isLoading && event.target.value.length > 0) {
+            let re = new RegExp(event.target.value, 'i');
+            this.setState({
+                matched_skaters: this.props.skaters.filter(skater => {
 
-                    return skater.name.match( re ) !== null;
-                } )
-            } );
+                    return skater.name.match(re) !== null;
+                })
+            });
         } else {
-            this.setState( { matched_skaters: [] } );
+            this.setState({ matched_skaters: [] });
         }
     }
-    render(){
-        return <div>
-            <input type="text" placeholder="Quick Add Player" onChange={ this.inputChangeHandler } />
-            <ul style={ { listStyleType:'none', padding:'0', position:'absolute', backgroundColor:'#282c34', display:'flex', flexDirection:'column', flexGrow:'1', border:'thin solid white' } }>
+    render() {
+        return <div style={{ flex: '0 0 100%', border: 'thin solid red' }}>
+            <input type="text" placeholder="Quick Add Player" onChange={this.inputChangeHandler} />
+            <ul style={{ listStyleType: 'none', padding: '0', position: 'absolute', backgroundColor: '#282c34' }}>
                 {
                     /** todo: display list of ALL playing skaters matching 
                      * filter.
@@ -45,8 +45,8 @@ class QuickAddSearch extends React.Component{
                      * 
                      * 
                     */
-                     
-                   this.state.matched_skaters.map( skater => <li><SkaterSelector skater={ skater } selectedSkaters={ this.props.selectedSkaters } click={ this.props.changeSelectedSkater } /></li> )
+
+                    this.state.matched_skaters.map(skater => <li><SkaterSelector skater={skater} selectedSkaters={this.props.selectedSkaters} click={this.props.changeSelectedSkater} /></li>)
                 }
             </ul>
         </div>

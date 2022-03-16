@@ -17,20 +17,20 @@ class ScheduleSkaters extends React.Component {
         Object.keys(skatersByTeam).map(team => skatersByTeam[team].sort((skater1, skater2) => skater2.goals - skater1.goals));
 
         let scheduleSkaters = [];
-        for (let teamIdx = 0; teamIdx < scheduledTeams.length; teamIdx += 2) {            
-            let homeTeam = scheduledTeams[ teamIdx ];
-            let awayTeam = scheduledTeams[ teamIdx + 1 ];
-            const gameSkatersByTeam = { 
-                [homeTeam]:skatersByTeam[ homeTeam ],
-                [awayTeam]:skatersByTeam[ awayTeam ]
+        for (let teamIdx = 0; teamIdx < scheduledTeams.length; teamIdx += 2) {
+            let homeTeam = scheduledTeams[teamIdx];
+            let awayTeam = scheduledTeams[teamIdx + 1];
+            const gameSkatersByTeam = {
+                [homeTeam]: skatersByTeam[homeTeam],
+                [awayTeam]: skatersByTeam[awayTeam]
             };
             scheduleSkaters.push(
-                <GameSkaters 
-                    skaters={ gameSkatersByTeam } 
-                    teams={ homeTeam + '-' + awayTeam } 
-                    selectedSkaters={ this.props.selectedSkaters } 
-                    click={ this.props.changeSelectedSkater } 
-                />    
+                <GameSkaters
+                    skaters={gameSkatersByTeam}
+                    teams={homeTeam + '-' + awayTeam}
+                    selectedSkaters={this.props.selectedSkaters}
+                    click={this.props.changeSelectedSkater}
+                />
             );
         }
         return scheduleSkaters;
@@ -47,8 +47,8 @@ class ScheduleSkaters extends React.Component {
             return 'loading';
         }
         let scheduleSkaters = this.getScheduleSkaters();
-        return <div>
-            { scheduleSkaters }
+        return <div style={{  }}>
+            {scheduleSkaters}
         </div>;
     }
 }
