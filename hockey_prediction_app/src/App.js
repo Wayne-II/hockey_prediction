@@ -3,7 +3,8 @@ import './App.css';
 import React from 'react';
 
 import SelectedSkaters from './SelectedSkaters.js';
-import SelectionOptions from './SelectionOptions';
+//import SelectionOptions from './SelectionOptions';
+import ScheduleSkaters from './ScheduleSkaters.js';
 import QuickAddSearch from './QuickAddSearch.js';
 
 //TODO: replace input buttons with labeled buttons ( 0, 1, 2, 3 being the labels )
@@ -67,7 +68,7 @@ class App extends React.Component{
           <h1 style={ { fontFamily: "Coffee Script" } }>Coffee-o-Matic</h1>
           <QuickAddSearch isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
-          <SelectionOptions isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
+          <ScheduleSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
         </header>
         
       </div>

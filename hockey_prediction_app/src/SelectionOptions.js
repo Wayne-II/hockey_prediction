@@ -71,7 +71,6 @@ class SelectionOptions extends React.Component {
       }
       let skaters_list = this.getSkatersList();
       return <div>
-        <span>skater picks</span>
         {skaters_list}
         </div>;
     }
