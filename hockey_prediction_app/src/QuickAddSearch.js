@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayerSelector from './PlayerSelector';
+import SkaterSelector from './SkaterSelector';
 
 /**
  * TODO
@@ -15,7 +15,6 @@ class QuickAddSearch extends React.Component{
         };
     }
     inputChangeHandler( event ){
-        console.log( 'QuickAddSearch::inputChangeHandler', event );
         if( !this.props.isLoading && event.target.value.length > 0 ){
             let re = new RegExp( event.target.value, 'i' );
             this.setState( { 
@@ -31,8 +30,7 @@ class QuickAddSearch extends React.Component{
     render(){
         return <div>
             <input type="text" placeholder="Quick Add Player" onChange={ this.inputChangeHandler } />
-            <ul>
-                <span>Search Results</span>
+            <ul style={ { listStyleType:'none', padding:'0', position:'absolute', backgroundColor:'#282c34', display:'flex', flexDirection:'column', flexGrow:'1', border:'thin solid white' } }>
                 {
                     /** todo: display list of ALL playing skaters matching 
                      * filter.
@@ -48,7 +46,7 @@ class QuickAddSearch extends React.Component{
                      * 
                     */
                      
-                   this.state.matched_skaters.map( skater => <li><PlayerSelector skater={ skater } selectedSkaters={ this.props.selectedSkaters } click={ this.props.changeSelectedSkater } />{ skater.name }</li> )
+                   this.state.matched_skaters.map( skater => <li><SkaterSelector skater={ skater } selectedSkaters={ this.props.selectedSkaters } click={ this.props.changeSelectedSkater } /></li> )
                 }
             </ul>
         </div>

@@ -3,11 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 class SelectedSkater extends React.Component{
-    constructor(props){
-        super( props );
-    }
     render(){
-        console.log( 'selected skater', this.props )
         return <div>
             <FontAwesomeIcon 
                 icon={ faBan } 
