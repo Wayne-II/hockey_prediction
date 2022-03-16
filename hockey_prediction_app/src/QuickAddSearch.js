@@ -1,6 +1,11 @@
 import React from 'react';
 import PlayerSelector from './PlayerSelector';
 
+/**
+ * TODO
+ * focus back on input once button pushed with contents removed
+ */
+
 class QuickAddSearch extends React.Component{
     constructor( props ){
         super( props );

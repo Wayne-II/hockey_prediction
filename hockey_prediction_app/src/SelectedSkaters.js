@@ -1,6 +1,11 @@
 import React from 'react';
 import SkatersPicks from './SkatersPicks.js';
 
+
+/**
+ * TODO
+ * add ability to remove selected skaters from lists ( but not switch )
+ */
 class SelectedSkaters extends React.Component {
     render(){
       if( this.props.isLoading ){
