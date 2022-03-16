@@ -30,6 +30,7 @@ class ScheduleSkaters extends React.Component {
                     teams={homeTeam + '-' + awayTeam}
                     selectedSkaters={this.props.selectedSkaters}
                     click={this.props.changeSelectedSkater}
+                    standings={this.props.standings}
                 />
             );
         }
@@ -49,9 +50,8 @@ class ScheduleSkaters extends React.Component {
         let scheduleSkaters = this.getScheduleSkaters();
         return <div style={{
             display: 'flex',
-            border: 'thin solid red',
             flex: '1 0 100%',
-            flexWrap:'wrap',
+            flexWrap: 'wrap',
         }}>
             {scheduleSkaters}
         </div>;

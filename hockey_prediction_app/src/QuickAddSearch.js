@@ -28,7 +28,7 @@ class QuickAddSearch extends React.Component {
         }
     }
     render() {
-        return <div style={{ flex: '0 0 100%', border: 'thin solid red' }}>
+        return <div style={{ flex: '0 0 100%',zIndex:99 }}>
             <input type="text" placeholder="Quick Add Player" onChange={this.inputChangeHandler} />
             <ul style={{ listStyleType: 'none', padding: '0', position: 'absolute', backgroundColor: '#282c34' }}>
                 {
