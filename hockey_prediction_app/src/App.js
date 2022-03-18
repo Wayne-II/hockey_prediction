@@ -6,6 +6,7 @@ import SelectedSkaters from './SelectedSkaters.js';
 //import SelectionOptions from './SelectionOptions';
 import ScheduleSkaters from './ScheduleSkaters.js';
 import QuickAddSearch from './QuickAddSearch.js';
+import SkaterExtractor from './SkaterExtractor.js';
 
 //TODO: replace input buttons with labeled buttons ( 0, 1, 2, 3 being the labels )
 //TODO: extraction of <Hockey /> function(s) to component(s)
@@ -66,6 +67,7 @@ class App extends React.Component{
       <div className="App">
         <header className="App-header">
           <h1 style={ { fontFamily: "Coffee Script" } }>Coffee-o-Matic</h1>
+          <SkaterExtractor />
           <QuickAddSearch isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <ScheduleSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
