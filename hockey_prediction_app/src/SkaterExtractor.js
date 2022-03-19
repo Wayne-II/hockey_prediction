@@ -8,11 +8,12 @@ class SkaterExtractor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imagePaths: { 1: [], 2: [], 3: [] },
-            pickNumber: 1
+            imagePaths: [],
+            pickOptions: { 1: [], 2: [], 3: [] }
         }
         this.addImageToPick = this.addImageToPick.bind(this);
         this.convertImagesToSkaters = this.convertImagesToSkaters.bind(this);
+
         this.pickRe = new RegExp('pick #([1-3])', 'i');
         this.appMenuRe = new RegExp('Home Order Scan Offers Account');
         this.gameMenuRe = new RegExp('Play History Leaderboard Game Info');
@@ -24,13 +25,8 @@ class SkaterExtractor extends React.Component {
             imagePaths.push(URL.createObjectURL(event.target.files[i]));
         }
         this.setState({
-            imagePaths: {
-                [this.state.pickNumber]: imagePaths
-            }
+            imagePaths: [...imagePaths]
         });
-    }
-    setUploadPickNumber(event) {
-        this.setState({ pickNumber: event.target.value });
     }
 
     getNamesMetadata(data) {
@@ -115,7 +111,7 @@ class SkaterExtractor extends React.Component {
 
     convertImagesToSkaters(event) {
         console.log('convert', this.state);
-        this.state.imagePaths[this.state.pickNumber].map(imagePath => {
+        this.state.imagePaths.map(imagePath => {
             Tesseract.recognize(
                 imagePath,
                 'eng',
@@ -123,11 +119,77 @@ class SkaterExtractor extends React.Component {
                 .catch(err => { console.log(err) })
                 .then(result => {
                     console.log(result);
-                    const names = this.extractNames(result.data);
-                    console.log(names);
+                    const namesRaw = this.extractNames(result.data);
+                    console.log(namesRaw);
+                    const namesClean = this.cleanUpResultsData(namesRaw);
+                    const pickNumber = this.getPickNumberFromResultsData(namesRaw);
+                    console.log('clean names', pickNumber, namesClean);
+                    /**
+                     * TODO delete this code once 100% clean names are visible on ui
+                     */
+                    const deleteMe = {
+                        imagePaths: [...this.state.imagePaths],
+                        pickOptions: {
+                            1: [...this.state.pickOptions[1]],
+                            2: [...this.state.pickOptions[2]],
+                            3: [...this.state.pickOptions[3]],
+                            [pickNumber]: [
+                                ...this.state.pickOptions[pickNumber],
+                                ...namesClean
+                            ]
+
+                        }};
+                    console.log('names extracted', 'pick' + pickNumber, deleteMe );
+                    // this.setState(prevState => ({
+                    //     imagePaths: [...prevState.imagePaths],
+                    //     pickOptions: {
+                    //         1: [...prevState.pickOptions[1]],
+                    //         2: [...prevState.pickOptions[2]],
+                    //         3: [...prevState.pickOptions[3]],
+                    //         [pickNumber]: [
+                    //             ...prevState.pickOptions[pickNumber],
+                    //             ...namesClean
+                    //         ]
+
+                    //     }
+                    // }));
+                    namesClean.forEach( name => {
+                        this.props.changeSelectedSkater( { name:name, choice:pickNumber } )
+                    });
                 });
         });
+    }
 
+    getPickNumberFromResultsData(resultsData) {
+        return Object.keys(resultsData).reduce((prev, cur) => {
+            if (resultsData[cur].length > 0) {
+                return cur;
+            }
+            return prev;
+        }, null);
+    }
+
+    cleanUpResultsData(resultsData) {
+        const pickNumber = this.getPickNumberFromResultsData(resultsData);
+
+        const nameReg = new RegExp(/^[a-z\-']+$/, 'i');
+
+        const cleanNames = resultsData[pickNumber].reduce((cleanNames, line) => {
+            if (line.length > 1) {
+                const filteredWords = line.reduce((filteredWords, lineItem) => {
+                    if (lineItem.text.length > 1 && lineItem.text.match(nameReg)) {
+                        filteredWords.push(lineItem.text)
+                    }else{
+                        console.log( 'bad name', lineItem.text );
+                    }
+                    return filteredWords;
+                }, []);
+                cleanNames.push( filteredWords.join( ' ' ) );
+            }
+            return cleanNames;
+        }, [])
+
+        return cleanNames;
     }
 
     render() {
@@ -137,9 +199,6 @@ class SkaterExtractor extends React.Component {
         }
         return <div>
             <PickImages pickNumber="1" addImage={this.addImageToPick} />
-            <select onChange={this.setUploadPickNumber}>
-                {pickOptions}
-            </select>
             <input type="file" onChange={this.addImageToPick} multiple />
             <FontAwesomeIcon icon={faBarcode} onClick={this.convertImagesToSkaters} />,
         </div>

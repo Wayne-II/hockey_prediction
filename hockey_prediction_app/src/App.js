@@ -32,20 +32,14 @@ class App extends React.Component{
     } );
   }
 
-  changeSelectedSkater( event ){  
+  changeSelectedSkater( dataset ){  
     /**TODO: For some reason, when using FontAwesomeIcon component,
      * the target for the onclick could be either an svg or a
      * path.  The problem is that the data- attributes are within
      * the dataset of the svg element and not the path.  Figure out
      * how to better handle this.
      */
-    let dataset = {};
-    if( event.target.tagName === 'svg' ){
-      dataset = event.target.dataset
-    }
-    if( event.target.tagName === 'path' ){
-      dataset = event.target.parentElement.dataset;
-    }
+    /*remove event and pass event data to function*/
 
     let selection = parseInt( dataset.choice );
     let selection_filter = skater_name => dataset.name !== skater_name;
@@ -66,8 +60,8 @@ class App extends React.Component{
     return (
       <div className="App">
         <header className="App-header">
-          <h1 style={ { fontFamily: "Coffee Script" } }>Coffee-o-Matic</h1>
-          <SkaterExtractor />
+            <h1 style={ { fontFamily: "Coffee Script" } }>Coffee-o-Matic</h1>
+          <SkaterExtractor skaters={ this.state.skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <QuickAddSearch isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <SelectedSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } changeSelectedSkater={ this.changeSelectedSkater } />
           <ScheduleSkaters isLoading={ this.state.isLoading } skaters={ this.state.skaters } selectedSkaters={ this.state.selected_skaters } schedule={ this.state.schedule } standings={ this.state.standings } teams={ this.state.teams } changeSelectedSkater={ this.changeSelectedSkater } />
