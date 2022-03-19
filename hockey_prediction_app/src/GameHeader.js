@@ -6,10 +6,10 @@ class GameHeader extends React.Component {
         const lose = {color:'red'};
         const draw = {color:'yellow'};
         const defaultStyle = {flexGrow:99, alignSelf:'center'};
-        console.log( this.props.standings );
         const teams = this.props.teams.split('-');
         const { [this.props.teams]: matchupStandings} = this.props.standings;
         let homeStyle, visitStyle = { ...defaultStyle, ...draw};
+
         if( matchupStandings > 0 ){
             homeStyle = { ...defaultStyle, ...win };
             visitStyle = { ...defaultStyle, ...lose };
@@ -17,6 +17,7 @@ class GameHeader extends React.Component {
             homeStyle = { ...defaultStyle, ...lose };
             visitStyle = { ...defaultStyle, ...win };
         }
+        
         return <div style={{
             display:'flex',
             flexDirection:'row',

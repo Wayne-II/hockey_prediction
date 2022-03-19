@@ -110,49 +110,16 @@ class SkaterExtractor extends React.Component {
     }
 
     convertImagesToSkaters(event) {
-        console.log('convert', this.state);
         this.state.imagePaths.map(imagePath => {
             Tesseract.recognize(
                 imagePath,
                 'eng',
             )
-                .catch(err => { console.log(err) })
+                .catch(err => { console.log('Tesseract error', err) })
                 .then(result => {
-                    console.log(result);
                     const namesRaw = this.extractNames(result.data);
-                    console.log(namesRaw);
                     const namesClean = this.cleanUpResultsData(namesRaw);
                     const pickNumber = this.getPickNumberFromResultsData(namesRaw);
-                    console.log('clean names', pickNumber, namesClean);
-                    /**
-                     * TODO delete this code once 100% clean names are visible on ui
-                     */
-                    const deleteMe = {
-                        imagePaths: [...this.state.imagePaths],
-                        pickOptions: {
-                            1: [...this.state.pickOptions[1]],
-                            2: [...this.state.pickOptions[2]],
-                            3: [...this.state.pickOptions[3]],
-                            [pickNumber]: [
-                                ...this.state.pickOptions[pickNumber],
-                                ...namesClean
-                            ]
-
-                        }};
-                    console.log('names extracted', 'pick' + pickNumber, deleteMe );
-                    // this.setState(prevState => ({
-                    //     imagePaths: [...prevState.imagePaths],
-                    //     pickOptions: {
-                    //         1: [...prevState.pickOptions[1]],
-                    //         2: [...prevState.pickOptions[2]],
-                    //         3: [...prevState.pickOptions[3]],
-                    //         [pickNumber]: [
-                    //             ...prevState.pickOptions[pickNumber],
-                    //             ...namesClean
-                    //         ]
-
-                    //     }
-                    // }));
                     namesClean.forEach( name => {
                         this.props.changeSelectedSkater( { name:name, choice:pickNumber } )
                     });
@@ -180,6 +147,10 @@ class SkaterExtractor extends React.Component {
                     if (lineItem.text.length > 1 && lineItem.text.match(nameReg)) {
                         filteredWords.push(lineItem.text)
                     }else{
+                        /**
+                         * TODO: collect and list names that weren't found in
+                         * skaters list
+                         */
                         console.log( 'bad name', lineItem.text );
                     }
                     return filteredWords;
