@@ -2,18 +2,20 @@ import React from 'react';
 import Tesseract from 'tesseract.js';
 import PickImages from './PickImages.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBarcode } from '@fortawesome/free-solid-svg-icons';
+import { faBarcode, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import SkaterExtractorInfo from './SkaterExtractorInfo.js';
 
 class SkaterExtractor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             imagePaths: [],
-            pickOptions: { 1: [], 2: [], 3: [] }
+            pickOptions: { 1: [], 2: [], 3: [] },
+            showInfo:false
         }
         this.addImageToPick = this.addImageToPick.bind(this);
         this.convertImagesToSkaters = this.convertImagesToSkaters.bind(this);
-
+        this.handleInfoClick = this.handleInfoClick.bind( this );
         this.pickRe = new RegExp('pick #([1-3])', 'i');
         this.appMenuRe = new RegExp('Home Order Scan Offers Account');
         this.gameMenuRe = new RegExp('Play History Leaderboard Game Info');
@@ -162,16 +164,17 @@ class SkaterExtractor extends React.Component {
 
         return cleanNames;
     }
+    handleInfoClick(event){
+        this.setState({showInfo:!this.state.showInfo})
+    }
 
     render() {
-        let pickOptions = [];
-        for (let i = 0; i < 3; ++i) {
-            pickOptions.push(<option value={i + 1}>{i + 1}</option>);
-        }
         return <div>
             <PickImages pickNumber="1" addImage={this.addImageToPick} />
             <input type="file" onChange={this.addImageToPick} multiple />
             <FontAwesomeIcon icon={faBarcode} onClick={this.convertImagesToSkaters} />,
+            <FontAwesomeIcon icon={faCircleInfo} onClick={this.handleInfoClick} />
+            <SkaterExtractorInfo showInfo={this.state.showInfo} />
         </div>
     }
 }

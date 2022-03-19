@@ -1,5 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import SkaterSelector from './SkaterSelector';
+import SkaterSelector from './SkaterSelector.js';
+import QuickAddInfo from './QuickAddInfo.js';
 
 /**
  * TODO
@@ -10,8 +13,10 @@ class QuickAddSearch extends React.Component {
     constructor(props) {
         super(props);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
+        this.handleInfoClick = this.handleInfoClick.bind( this );
         this.state = {
-            matched_skaters: []
+            matched_skaters: [],
+            showInfo:false
         };
     }
     inputChangeHandler(event) {
@@ -27,9 +32,16 @@ class QuickAddSearch extends React.Component {
             this.setState({ matched_skaters: [] });
         }
     }
+
+    handleInfoClick( event ){
+        this.setState( { showInfo:!this.state.showInfo } )
+    }
+
     render() {
         return <div style={{ flex: '0 0 100%',zIndex:99 }}>
             <input type="text" placeholder="Quick Add Player" onChange={this.inputChangeHandler} />
+            <FontAwesomeIcon icon={faCircleInfo} onClick={this.handleInfoClick} />
+            <QuickAddInfo showInfo={this.state.showInfo} />
             <ul style={{ listStyleType: 'none', padding: '0', position: 'absolute', backgroundColor: '#282c34' }}>
                 {
                     /** todo: display list of ALL playing skaters matching 
