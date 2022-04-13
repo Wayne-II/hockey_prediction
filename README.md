@@ -1,2 +1,2 @@
 # hockey_prediction
-requires table-scraper
+Proof of Concept hobbled together with table scraping and react app.  Uses OCR if the screenshots are formatted properly.  There are instructions, and cropped screenshots describing how to create the screenshots and use the app.  This app is intended to be used for the Tim Horton's App Hockey Challenge mini-game.  Ultimate goal is to deploy statistical analysis based on using previous game data.
